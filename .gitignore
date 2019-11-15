@@ -1,0 +1,10 @@
+studyimooc-foodie-dev.iml
+.idea/
+foodie-dev-mapper/target/
+foodie-dev-pojo/target/
+foodie-dev-common/target/
+foodie-dev-api/target/
+foodie-dev-api/foodie-dev-api.iml
+foodie-dev-mapper/foodie-dev-mapper.iml
+foodie-dev-common/foodie-dev-common.iml
+foodie-dev-service/target/
