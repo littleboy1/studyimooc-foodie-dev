@@ -12,7 +12,7 @@ spring:
     password: admin
     hikari:
       connection-timeout: 30000 # 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQ
-      minimum-idle: 5             # 最小连接数
+      minimum-idle: 5             # 最小连接数   最好是不要设置最小最大都是10（默认）
       maximum-pool-size: 20          # 最大连接数
       auto-commit: true              # 自动提交
       idle-timeout: 600000             # 连接超时的最大时长（毫秒），超时则被释放（retired），默认:10分钟
@@ -32,3 +32,8 @@ server:
   tomcat:
     uri-encoding: utf-8
     max-http-header-size: 80KB
+
+mapper:
+  mappers: com.lzq.my.mapper.MyMapper
+  not-empty: true
+  identity: MYSQL
