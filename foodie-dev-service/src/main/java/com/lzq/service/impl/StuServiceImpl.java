@@ -40,4 +40,33 @@ public class StuServiceImpl implements StuService {
     public void deleteStu(int id) {
         stuMapper.deleteByPrimaryKey(id);
     }
+    @Override
+    public void saveParent(){
+        Stu stu = new Stu();
+        stu.setName("parent");
+        stu.setAge(19);
+        stuMapper.insert(stu);
+
+    }
+    @Transactional(propagation = Propagation.NESTED)
+    @Override
+    public void saveChildren(){
+        saveChild1();
+        int a = 1/0;
+        saveChild2();
+    }
+
+    private void saveChild2() {
+        Stu stu = new Stu();
+        stu.setName("child2");
+        stu.setAge(22);
+        stuMapper.insert(stu);
+    }
+
+    private void saveChild1() {
+        Stu stu = new Stu();
+        stu.setName("child1");
+        stu.setAge(11);
+        stuMapper.insert(stu);
+    }
 }
