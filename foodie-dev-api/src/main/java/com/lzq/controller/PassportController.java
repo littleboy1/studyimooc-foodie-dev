@@ -4,6 +4,8 @@ import com.lzq.bo.UserBo;
 import com.lzq.pojo.Users;
 import com.lzq.service.UserService;
 import com.lzq.utils.JsonResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author lzq
  */
+@Api(value = "注册登录",tags ={"用于注册登录的接口"})
 @RestController
 @RequestMapping("Passport")
 public class PassportController {
@@ -18,6 +21,7 @@ public class PassportController {
     @Autowired
     private UserService userService;
 
+    @ApiOperation(value = "用户名是否存在",notes ="用户名是否存在",httpMethod = "GET")
     @GetMapping("/usernameIsExsit")
     public JsonResult userNameIsExist(@RequestParam String username){
         if (StringUtils.isBlank(username)){
@@ -31,6 +35,7 @@ public class PassportController {
     }
 
     @PostMapping("regist")
+    @ApiOperation(value = "用户注册",notes ="用户注册",httpMethod = "POST")
     public JsonResult regist(@RequestBody UserBo userBo){
         String password = userBo.getPassword();
         String username = userBo.getUsername();
