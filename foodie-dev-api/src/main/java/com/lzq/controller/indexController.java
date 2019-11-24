@@ -8,6 +8,7 @@ import com.lzq.service.CarouselService;
 import com.lzq.service.CategoryService;
 import com.lzq.utils.JsonResult;
 import com.lzq.vo.CategoryVO;
+import com.lzq.vo.NewItemsVO;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,15 @@ public class indexController {
             return JsonResult.errorMsg("当前请求的参数不正确，请自行调整");
         }
         List<CategoryVO> result = categoryService.getSubCatList(rootCatId);
+        return JsonResult.ok(result);
+    }
+
+    @GetMapping("/sixNewItems/{rootCatId}")
+    public JsonResult sixNewItems(@PathVariable Integer rootCatId){
+        if (rootCatId == null){
+            return JsonResult.errorMsg("分类不存在");
+        }
+        List<NewItemsVO> result = categoryService.getSixNewItemLazy(rootCatId);
         return JsonResult.ok(result);
     }
 
