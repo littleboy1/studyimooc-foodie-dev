@@ -95,4 +95,14 @@ public class PassportController {
         userResult.setBirthday(null);
         return userResult;
     }
+
+    @PostMapping("/logout")
+    @ApiOperation(value = "用户退出",notes ="用户退出",httpMethod = "POST")
+    public JsonResult logout(@RequestParam String userId,HttpServletRequest request,
+                             HttpServletResponse response) {
+
+        //清除用户的cookie
+        CookieUtils.deleteCookie(request,response,"user");
+        return JsonResult.ok();
+    }
 }
