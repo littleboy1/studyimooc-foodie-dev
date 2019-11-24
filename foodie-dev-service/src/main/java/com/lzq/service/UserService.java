@@ -8,4 +8,7 @@ public interface UserService {
     boolean queryUserNameIsExist(String username);
 
     public Users createUser(UserBo userBo);
+
+
+    Users queryUserForLogin(String username,String password);
 }
