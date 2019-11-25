@@ -99,12 +99,14 @@ public class ItemServiceImpl implements ItemService {
        map.put("itemId",itemId);
        map.put("level",level);
        PageHelper.startPage(page,size);
+       //這裡返回的已經不是自己的List了这里返回的是包装好的配置对象下面只是对当前page进行强转
         List<ItemCommentVO> itemCommentVOS = commentsMapperCustom.queryItemComments(map);
+
         List<ItemCommentVO> DesensitizationResult = itemCommentVOS.stream().
                 peek(item -> item.setNickname(DesensitizationUtil.commonDisplay(item.getNickname())))
                 .collect(Collectors.toList());
-        PageInfo pageInfo = new PageInfo(DesensitizationResult);
-        PagedGridResult result = PagedGridResult.builder().page(page).rows(itemCommentVOS)
+        PageInfo pageInfo = new PageInfo(itemCommentVOS);
+        PagedGridResult result = PagedGridResult.builder().page(page).rows(DesensitizationResult)
                 .total(pageInfo.getPages()).records(pageInfo.getTotal()).build();
         return result;
     }
