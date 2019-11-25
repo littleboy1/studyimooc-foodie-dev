@@ -10,6 +10,7 @@ import com.lzq.mapper.*;
 import com.lzq.pojo.*;
 import com.lzq.service.CarouselService;
 import com.lzq.service.ItemService;
+import com.lzq.utils.DesensitizationUtil;
 import com.lzq.utils.PagedGridResult;
 import com.lzq.vo.CommentLevelCountsVO;
 import com.lzq.vo.ItemCommentVO;
@@ -21,6 +22,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -98,7 +100,10 @@ public class ItemServiceImpl implements ItemService {
        map.put("level",level);
        PageHelper.startPage(page,size);
         List<ItemCommentVO> itemCommentVOS = commentsMapperCustom.queryItemComments(map);
-       PageInfo pageInfo = new PageInfo(itemCommentVOS);
+        List<ItemCommentVO> DesensitizationResult = itemCommentVOS.stream().
+                peek(item -> item.setNickname(DesensitizationUtil.commonDisplay(item.getNickname())))
+                .collect(Collectors.toList());
+        PageInfo pageInfo = new PageInfo(DesensitizationResult);
         PagedGridResult result = PagedGridResult.builder().page(page).rows(itemCommentVOS)
                 .total(pageInfo.getPages()).records(pageInfo.getTotal()).build();
         return result;
