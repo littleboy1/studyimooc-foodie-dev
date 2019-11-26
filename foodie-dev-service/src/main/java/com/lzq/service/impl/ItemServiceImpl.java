@@ -1,5 +1,5 @@
 package com.lzq.service.impl;
-import	java.awt.print.Pageable;
+import java.util.HashMap;
 import	java.util.Map;
 
 import com.github.pagehelper.PageHelper;
@@ -8,12 +8,12 @@ import com.google.common.collect.Maps;
 import com.lzq.enums.CommentLevel;
 import com.lzq.mapper.*;
 import com.lzq.pojo.*;
-import com.lzq.service.CarouselService;
 import com.lzq.service.ItemService;
 import com.lzq.utils.DesensitizationUtil;
 import com.lzq.utils.PagedGridResult;
 import com.lzq.vo.CommentLevelCountsVO;
 import com.lzq.vo.ItemCommentVO;
+import com.lzq.vo.SearchItemsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -39,6 +39,9 @@ public class ItemServiceImpl implements ItemService {
     private ItemsCommentsMapper commentsMapper;
     @Autowired
     private ItemsCommentsMapperCustom commentsMapperCustom;
+    @Autowired
+    private ItemsMapperCustom itemsMapperCustom;
+
    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public Items queryItemById(String itemId) {
@@ -109,5 +112,36 @@ public class ItemServiceImpl implements ItemService {
         PagedGridResult result = PagedGridResult.builder().page(page).rows(DesensitizationResult)
                 .total(pageInfo.getPages()).records(pageInfo.getTotal()).build();
         return result;
+    }
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedGridResult searhItems(String keywords, String sort, Integer page, Integer pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("keywords", keywords);
+        map.put("sort", sort);
+        PageHelper.startPage(page, pageSize);
+        List<SearchItemsVO> searchItemsVOS = itemsMapperCustom.searchItems(map);
+        PagedGridResult result = getPagedGridResult(page, searchItemsVOS);
+        return result;
+    }
+
+    @Override
+    public PagedGridResult searhItems(Integer catId, String sort, Integer page, Integer pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("catId", catId);
+        map.put("sort", sort);
+        PageHelper.startPage(page, pageSize);
+        List<SearchItemsVO> searchItemsVOS = itemsMapperCustom.searchItemsByThirdCat(map);
+        PagedGridResult result = getPagedGridResult(page, searchItemsVOS);
+        return result;
+    }
+
+    private PagedGridResult getPagedGridResult(Integer page, List<SearchItemsVO> searchItemsVOS) {
+        PageInfo<?> pageList = new PageInfo<>(searchItemsVOS);
+        return PagedGridResult.builder()
+                .page(page)
+                .rows(searchItemsVOS)
+                .total(pageList.getPages())
+                .records(pageList.getTotal()).build();
     }
 }
