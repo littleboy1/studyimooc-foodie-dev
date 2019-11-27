@@ -1,6 +1,5 @@
 package com.lzq.service.impl;
-import java.util.HashMap;
-import	java.util.Map;
+import java.util.*;
 
 import cn.hutool.core.map.MapUtil;
 import com.github.pagehelper.PageHelper;
@@ -15,14 +14,13 @@ import com.lzq.utils.PagedGridResult;
 import com.lzq.vo.CommentLevelCountsVO;
 import com.lzq.vo.ItemCommentVO;
 import com.lzq.vo.SearchItemsVO;
+import com.lzq.vo.ShopcartVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -135,6 +133,15 @@ public class ItemServiceImpl implements ItemService {
         List<SearchItemsVO> searchItemsVOS = itemsMapperCustom.searchItemsByThirdCat(map);
         PagedGridResult result = getPagedGridResult(page, searchItemsVOS);
         return result;
+    }
+
+    @Override
+    public List<ShopcartVO> queryItemsBySpecIds(String itemSpecIds) {
+        String ids[] = itemSpecIds.split(",");
+        List<String> specIdsList = new ArrayList<>();
+        Collections.addAll(specIdsList, ids);
+
+       return itemsMapperCustom.queryItemsBySpecIds(specIdsList);
     }
 
     private PagedGridResult getPagedGridResult(Integer page, List<SearchItemsVO> searchItemsVOS) {

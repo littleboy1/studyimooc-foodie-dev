@@ -6,6 +6,7 @@ import com.lzq.pojo.ItemsParam;
 import com.lzq.pojo.ItemsSpec;
 import com.lzq.utils.PagedGridResult;
 import com.lzq.vo.CommentLevelCountsVO;
+import com.lzq.vo.ShopcartVO;
 
 import java.util.List;
 
@@ -31,4 +32,6 @@ public interface ItemService {
     PagedGridResult searhItems(String keywords, String sort, Integer page, Integer pageSize);
 
     PagedGridResult searhItems(Integer catId, String sort, Integer page, Integer pageSize);
+
+    List<ShopcartVO> queryItemsBySpecIds(String itemSpecIds);
 }
